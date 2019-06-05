@@ -82,11 +82,11 @@ public class View extends Application {
             controller.enterField.setText("");
             controller.console.setText("Ход первого игрока");
 
-            for (int y = 0; y < controller.matrix.sqrt; y++) {
-                for (int x = 0; x < controller.matrix.sqrt; x++) {
+            for (int y = 0; y < controller.sqrt; y++) {
+                for (int x = 0; x < controller.sqrt; x++) {
                     int finalX = x;
                     int finalY = y;
-                    controller.matrix.matrix[x][y].setOnMouseClicked( t -> {
+                    controller.matrix[x][y].setOnMouseClicked( t -> {
                         controller.matrixAction(finalX, finalY);
                     });
                 }
@@ -96,8 +96,21 @@ public class View extends Application {
         controller.enterWord.setOnMouseClicked( e -> {
             controller.enterWordAction();
 
-            if (controller.listOfWords.isEmpty())
-                controller.endGame.fire();
+            if (controller.listOfWords.isEmpty()) {
+                controller.enterWord.setDisable(true);
+                controller.reset.setDisable(true);
+                controller.endGame.setDisable(true);
+                controller.firstPlayerArea.setDisable(true);
+                controller.secondPlayerArea.setDisable(true);
+                for (int y = 0; y < controller.sqrt; y++) {
+                    for (int x = 0; x < controller.sqrt; x++) {
+                        controller.matrix[x][y].setStyle("-fx-background-color: grey");
+                        controller.matrix[x][y].setDisable(false);
+                    }
+                }
+
+                controller.endGameAction();
+            }
         });
 
         controller.reset.setOnMouseClicked( e -> controller.resetAction());
@@ -108,10 +121,10 @@ public class View extends Application {
             controller.endGame.setDisable(true);
             controller.firstPlayerArea.setDisable(true);
             controller.secondPlayerArea.setDisable(true);
-            for (int y = 0; y < controller.matrix.sqrt; y++) {
-                for (int x = 0; x < controller.matrix.sqrt; x++) {
-                    controller.matrix.matrix[x][y].setStyle("-fx-background-color: grey");
-                    controller.matrix.matrix[x][y].setDisable(false);
+            for (int y = 0; y < controller.sqrt; y++) {
+                for (int x = 0; x < controller.sqrt; x++) {
+                    controller.matrix[x][y].setStyle("-fx-background-color: grey");
+                    controller.matrix[x][y].setDisable(false);
                 }
             }
 

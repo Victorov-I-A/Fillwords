@@ -11,12 +11,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 public class Controller {
-    private Model model = new Model();
+    Model model = new Model();
     private int numberOfWords;
+    int sqrt;
     //матрица
-    SqrMatrix matrix;
+    Button[][] matrix;
     //лист множеств букв всех возможных слов
-    ArrayList<HashSet<Button>> listOfWords;
+    ArrayList<HashSet<Button>> listOfWords = new ArrayList<HashSet<Button>>();
     //множество букв, которых выбрал текущий игрок
     HashSet<Button> realTimeWord = new HashSet<>();
     //текущий игрок
@@ -58,25 +59,32 @@ public class Controller {
 
     public void start() throws IOException {
         model.createMatrix(numberOfWords);
-        matrix = model.getMatrix();
-        listOfWords = model.getSets();
+        sqrt = model.getMatrix().sqrt;
+        matrix = new Button[sqrt][sqrt];
+        for (int y = 0; y < sqrt; y++)
+            for (int x = 0; x < sqrt; x++)
+                matrix[x][y] = new Button();
 
+        model.getSets().forEach(set -> {
+            HashSet<Button> setOfButtons = new HashSet<>();
+            set.forEach(pair -> setOfButtons.add(matrix[pair.getKey()][pair.getValue()]));
+            listOfWords.add(setOfButtons);
+        });
         VBox vBoxOfMatrix = new VBox();
-
-        for (int y = 0; y < matrix.sqrt; y++) {
+        for (int y = 0; y < sqrt; y++) {
             HBox hBox = new HBox();
-            for (int x = 0; x < matrix.sqrt; x++) {
-                matrix.matrix[x][y].setPrefSize(50, 50);
-                hBox.getChildren().add(matrix.matrix[x][y]);
+            for (int x = 0; x < sqrt; x++) {
+                matrix[x][y].setText(model.getMatrix().matrix[x][y]);
+                matrix[x][y].setPrefSize(50, 50);
+                hBox.getChildren().add(matrix[x][y]);
             }
             vBoxOfMatrix.getChildren().add(hBox);
         }
-
         borderPane.setCenter(vBoxOfMatrix);
     }
 
     public void matrixAction(int x, int y) {
-        realTimeWord.add(matrix.matrix[x][y]);
+        realTimeWord.add(matrix[x][y]);
     }
 
     public void enterWordAction() {
