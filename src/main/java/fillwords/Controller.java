@@ -96,7 +96,7 @@ public class Controller {
                 console.setText("Ход второго игрока");
             } else {
                 secondPlayerRating = secondPlayerRating + realTimeWord.size();
-                secondPlayerArea.setText("Очки первого игрока:\n" + secondPlayerRating);
+                secondPlayerArea.setText("Очки второго игрока:\n" + secondPlayerRating);
                 realTimePlayer = false;
                 console.setText("Ход первого игрока");
             }

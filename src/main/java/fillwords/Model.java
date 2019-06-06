@@ -18,7 +18,7 @@ public class Model {
     //создание матрицы
     public void createMatrix(int numberOfWord) throws IOException {
         Random random = new Random();
-        String[] words = randomWords(numberOfWord);
+        ArrayList<String> words = randomWords(numberOfWord);
         matrix = new SqrMatrix((int) Math.pow(numberOfWord + Math.sqrt(numberOfWord), 2));
         ArrayList<Pair> listOfEmptyBox = matrix.listOfBoxes();
         ArrayList<HashSet<Pair<Integer, Integer>>> listOfSets = new ArrayList<>();
@@ -71,17 +71,22 @@ public class Model {
         this.listOfSets = listOfSets;
     }
 
-    private String[] randomWords(int numberOfWord) throws IOException {
-        String[] array = new String[numberOfWord];
+    private ArrayList<String> randomWords(int numberOfWord) throws IOException {
+        ArrayList<String> array = new ArrayList<>();
         Random random = new Random();
 
-        for (int i = 0; i < numberOfWord; i++) {
-            array[i] = Files.readAllLines(Paths.get("resourse/words.txt"))
+        for (int i = 1; i <= numberOfWord; i++) {
+            String word = Files.readAllLines(Paths.get("resourse/words.txt"))
                     .get(random.nextInt(
                             (int) Files.lines(Paths.get("resourse/words.txt")).count()
                             )
                     );
+            if (!array.contains(word))
+                array.add(word);
+            else
+                i--;
         }
+        System.out.println(array);
         return array;
     }
 
